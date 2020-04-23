@@ -1,25 +1,31 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, {useEffect, useState} from 'react';
 import './App.css';
+import CurrencyRow from './currencyRow';
+
+
+const Base_URL = 'https://api.exchangeratesapi.io/latest'
 
 function App() {
+  const [currencyOptions, setCurrencyOptions] = useState([])
+  console.log(currencyOptions)
+
+
+  useEffect(()=>{
+    fetch(Base_URL)
+    .then(res => res.json())
+    .then(data => {
+      setCurrencyOptions([data.base, ...Object.keys(data.rates)])
+    })
+  }, [])
+  
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <h1>Currency converter</h1>
+      <CurrencyRow />
+      <div className='equals'>= </div>
+      <CurrencyRow />
+
+    </>
   );
 }
 
